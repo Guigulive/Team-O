@@ -1,0 +1,6 @@
+{
+    "solidity.compileUsingRemoteVersion" : "latest",
+    "solidity.linter": "solium",
+    "solidity.enabledAsYouTypeCompilationErrorCheck": true,
+    "solidity.validationDelay": 1500
+}
