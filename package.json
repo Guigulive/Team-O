@@ -1,0 +1,29 @@
+{
+  "name": "Team-O",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start-ganache": "ganache-cli"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jerry-i/Team-O.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jerry-i/Team-O/issues"
+  },
+  "homepage": "https://github.com/jerry-i/Team-O#readme",
+  "devDependencies": {
+    "solc": "^0.4.21",
+    "solium": "^1.1.5",
+    "solium-plugin-security": "^0.1.1",
+    "web3": "^0.20.6",
+    "ganache-cli": "^6.1.0"
+  },
+  "dependencies": {}
+}
