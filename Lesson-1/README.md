@@ -23,7 +23,6 @@
 + EVM(Ethereum Virtual Machine) -> store data & run code
 + web3.js -> lib help to connect to blockchain node
 
-
 ## refer
 
 + [web3 api](https://github.com/ethereum/wiki/wiki/JavaScript-API)
