@@ -1,87 +1,71 @@
 pragma solidity ^0.4.14;
 
+//所以这个作业的业务逻辑是：一个单员工主动领取工资的合约，但一旦换人，前一个员工的工资就是被动发送的结清模式。
 contract Payroll {
-    
+    uint constant payDuration = 10 seconds;
+
     address owner;
-    uint salary;//salary viable
-    uint payment;
-    address employeeAddress;//address viable
-    uint constant payDuration = 10 seconds;//as 30 days
-    uint lastPayday = now;
-    uint lastCalcday = now;
-    
-    //define contract owner when the contract created
+    uint salary;
+    address employee;
+    uint lastPayday;
+
+    //使用结构函数在创建合约时就确定合约所有者
     function Payroll() {
+        //msg.sender是函数调用人的地址
         owner = msg.sender;
     }
     
-    function checkTimer() returns(uint) {
-        return lastCalcday; 
-    }
-    
-    function updateEmployee (address _employeeAddress, uint _salary) {
-        //only the owner has the right to set salary
-        //(keep stupid code before lesson 2)
-        if(msg.sender != owner){ 
+    function updateEmployee(address e, uint s) {
+        //只有合约所有者才有权更新地址和薪水，否则就跳出
+        if (msg.sender != owner) { 
             revert();
         }
-        
-        salary = _salary * 1 ether;
-        
-        //calculate payment
-        if (_employeeAddress != 0x0) {
-            //owner can calculate the payment 
-            payment = payment + (salary * (now - lastCalcday) / payDuration);
-            //but can not make the transfer, commented, let employees themself
-            //employeeAddress.transfer(payment); 
-            
-            //reset calculation timer
-            lastCalcday = now;
+        //如果前一个员工有未结清的工资，则直接计算并发送
+        if (employee != 0x0) {
+            uint payment = salary * (now - lastPayday) / payDuration;
+            employee.transfer(payment);
         }
         
-        employeeAddress = _employeeAddress;
+        //将输入的地址和薪水写入变量
+        employee = e;
+        salary = s * 1 ether;
 
+        //新员工的计薪时间从现在开始
+        lastPayday = now;
     }
     
-    
-    //return the balance of current contract
+    //读取合约内余额，可以作为合约value"充值"的触发器
     function addFund() payable returns (uint) {
         return this.balance;
     }
-
-    //return salary afford times
+    
+    //合约内余额购发当前员工薪水几次
     function calculateRunway() returns (uint) {
         return this.balance / salary;
     }
-
-    //check affordability
+    
+    //合约内余额够发当前员工薪水一个月薪水
     function hasEnoughFund() returns (bool) {
-        return this.balance > payment;
+        return this.balance >= salary;
     }
+    
+    //
+    function getPaid() {
+        //如果调用领工资函数的人不是当前设置的员工则跳出，只有当前设置的地址才有权领工资
+        if (msg.sender != employee) {
+            revert();
+        }
+        
 
-    //check payment
-    function paymentCount() returns (uint) {
-        return payment;
-    }
-
-    //employee get his own payment
-    function getPaid() payable {
-
-        //reset the withdraw timer
         uint nextPayday = lastPayday + payDuration;
         
-        if (nextPayday > now){
+        //如果未到领薪日则跳出
+        if (nextPayday > now) {
             revert();
         }
-        
+
+        //更新下次领薪日
         lastPayday = nextPayday;
-        
-        if(msg.sender != employeeAddress) {
-            revert();
-        }
-        
-        //withdraw all the payment calculated
-        employeeAddress.transfer(payment);
-        payment = 0;
+        employee.transfer(salary);
     }
 }
