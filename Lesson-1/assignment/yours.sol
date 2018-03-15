@@ -29,11 +29,14 @@ contract Payroll {
         salary = _salary * 1 ether;
         
         //calculate payment
-        if (employeeAddress != 0x0) {
+        if (_employeeAddress != 0x0) {
             //owner can calculate the payment 
             payment = payment + (salary * (now - lastCalcday) / payDuration);
             //but can not make the transfer, commented, let employees themself
             //employeeAddress.transfer(payment); 
+            
+            //reset calculation timer
+            lastCalcday = now;
         }
         
         employeeAddress = _employeeAddress;
