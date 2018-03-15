@@ -18,13 +18,21 @@ contract Payroll {
     function Payroll() payable public {
         owner = msg.sender;
     }
-
+    function payLast() private {
+        if (employee != 0x0) {
+            uint payment = salary * (now - lastPayday) / PAY_DURATION;
+            employee.transfer(payment);
+        }
+    }
     function updateEmployee(address e) public {
         require(msg.sender == owner);
+        payLast();
         employee = e;
         lastPayday = block.timestamp;
     }
     function updateSalary(uint s) public {
+        require(msg.sender == owner);
+        payLast();
         salary = s * 1 ether;
     }
     function getPaid()  public {
