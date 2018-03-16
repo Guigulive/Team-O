@@ -12,36 +12,39 @@ contract Payroll {
         owner = msg.sender;
     }
     
-    function updateAddress(address e){
+    /**更新地址时向原地址发送未发送的工资**/
+    function changeEmployee(address e){
         require(msg.sender == owner);
+        if (employee != 0x0) { 
+            uint payment = salary * (now - lastPayday) / payDuration;
+            employee.transfer(payment);
+        }
         employee = e;
         lastPayday = now;
     }
-    
-    function updateSalary(uint s){
-        require(msg.sender == owner);
-        salary = s * 1 ether;
-    }
-    
-    function initEmployee(address e, uint s){
-        require(msg.sender == owner);
-        employee = e;
-        salary = s * 1 ether;
+
+    /**更新工资时按照原工资向员工发送之前未发送的工资**/
+    function changeSalary(uint s){     
+        require(msg.sender==owner); 
+        if (employee != 0x0) {
+            uint payment = salary * (now - lastPayday) / payDuration;
+            employee.transfer(payment);
+        }
+        salary = s * 1 ether;    
         lastPayday = now;
     }
     
     function updateEmployee(address e, uint s) {
         require(msg.sender == owner);
+        
+        if (employee != 0x0) {
+            uint payment = salary * (now - lastPayday) / payDuration;
+            employee.transfer(payment);
+        }
+        
         employee = e;
         salary = s * 1 ether;
-        if (employee != 0x0) {
-            uint periodCount =  (now - lastPayday) / payDuration;
-            uint payment = salary * periodCount;
-            if(payment>0){
-                lastPayday = lastPayday + payDuration*periodCount;
-                employee.transfer(payment);
-            }
-        }
+        lastPayday = now;
     }
     
     function addFund() payable returns (uint) {
