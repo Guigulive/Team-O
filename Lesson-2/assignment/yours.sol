@@ -48,7 +48,7 @@ contract Payroll {
         employees.push(Employee(employeeId, salary*1 ether, now));
     }
 
-    /* remove *、
+    /* remove */
     function removeEmployee(address employeeId) {
         require(msg.sender == owner);
         var(employee,index) = _findEmployee(employeeId);
