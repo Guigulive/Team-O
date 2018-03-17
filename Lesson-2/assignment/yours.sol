@@ -65,6 +65,8 @@ contract Payroll {
         var (e,index)  = _findEmployee(employeeId);
         assert(e.id != 0x0);
         _partialPaid(e);
+        totalSalary -= employees[index].salary;
+        salaryCount--;
         delete employees[index];
         employees[index] = employees[employees.length - 1];
         employees.length--;
@@ -72,10 +74,12 @@ contract Payroll {
     }
     
     function updateEmployee(address employeeId, uint salary) {
+        salary *= 1 ether;
         require(msg.sender == owner);
         var (e,index)  = _findEmployee(employeeId);
         assert(e.id != 0x0);
         _partialPaid(e);
+        totalSalary += salary - employees[index].salary;
         employees[index].salary = salary;
         e.lastPayday = now;
     }
