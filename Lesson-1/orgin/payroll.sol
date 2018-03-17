@@ -1,49 +1,43 @@
 pragma solidity ^0.4.14;
-
 contract Payroll {
+    uint salary = 1 ;
+    address receiver = 0xca35b7d915458ef540ade6068dfe2f44e8fa733c;
     uint constant payDuration = 10 seconds;
-
-    address owner;
-    uint salary;
-    address employee;
-    uint lastPayday;
-
-    function Payroll() {
-        owner = msg.sender;
-    }
+    uint lastPayDay = now;
     
-    function updateEmployee(address e, uint s) {
-        require(msg.sender == owner);
-        
-        if (employee != 0x0) {
-            uint payment = salary * (now - lastPayday) / payDuration;
-            employee.transfer(payment);
-        }
-        
-        employee = e;
-        salary = s * 1 ether;
-        lastPayday = now;
-    }
-    
-    function addFund() payable returns (uint) {
+    function addFund() payable public returns (uint) {
         return this.balance;
     }
     
-    function calculateRunway() returns (uint) {
+    function calculateRunaway()  public returns (uint){
         return this.balance / salary;
     }
     
-    function hasEnoughFund() returns (bool) {
-        return calculateRunway() > 0;
+    function hasEnoughFund() public returns (bool){
+        return calculateRunaway() > 0;
     }
     
-    function getPaid() {
-        require(msg.sender == employee);
+    function getPaid() payable public{
+        if(msg.sender != receiver){
+            revert();
+        }
         
-        uint nextPayday = lastPayday + payDuration;
-        assert(nextPayday < now);
-
-        lastPayday = nextPayday;
-        employee.transfer(salary);
+        if(lastPayDay + payDuration > now){
+            revert();
+        }
+        
+        //the order of this two statement is curious.
+        //modify inner state first, then pay
+        lastPayDay = lastPayDay + payDuration;
+        receiver.transfer(salary);
+        
+    }
+    
+    function setSalary(uint x) public{
+        salary = x;
+    }
+    
+    function setReceiver(address x) public{
+        receiver = x;
     }
 }
