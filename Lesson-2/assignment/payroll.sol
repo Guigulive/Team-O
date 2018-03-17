@@ -80,7 +80,7 @@ contract Payroll {
     }
     
     /** 修改员工  **/
-    function updateEmployee(address employeeId, uint salary) returns(uint) {
+    function updateEmployee(address employeeId, uint salary) {
         require (msg.sender == owner);
         var(employee,index) = _findEmployee(employeeId);
         assert(employee.id != 0x0);
@@ -88,7 +88,7 @@ contract Payroll {
         employees[index].salary = salary * 1 ether;
         employees[index].lastPayday = now;
         //将工资差额加到总工资中去 
-       return totalSalary += (salary * 1 ether - employee.salary);
+        totalSalary += (salary * 1 ether - employee.salary);
     }
     
     
