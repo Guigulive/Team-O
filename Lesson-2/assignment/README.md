@@ -7,8 +7,8 @@
 每次加入一个员工后调用calculateRunway这个函数，并且记录消耗的gas是多少？Gas变化么？如果有 为什么？
 
 Sol:
--See file hw2_p1.sol
--Gas for:
+<br />See file hw2_p1.sol
+<br />Gas for:
 -no  trans excut
 -1   22971	1699
 -2   23759	2487
