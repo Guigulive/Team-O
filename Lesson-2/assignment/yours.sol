@@ -42,8 +42,9 @@ contract Payroll {
         require(isOwner());
         var (_e, ,) = _findEmployee(employeeId);
         assert(_e.id == 0x0);
-        totalSalary += salary;
-        employees.push(Employee(employeeId, salary * 1 ether, now));
+        uint paySalary = salary * 1 ether;
+        totalSalary += paySalary;
+        employees.push(Employee(employeeId, paySalary, now));
         return;
     }
 
@@ -63,9 +64,10 @@ contract Payroll {
         var (_e, i) = _findEmployee(employeeId);
         assert(_e.id != 0x0);
         _partialPaid(_e);
-        totalSalary += salary;
+        uint paySalary = salary * 1 ether;
+        totalSalary += paySalary;
         totalSalary -= employees[i].salary;
-        employees[i].salary = salary;
+        employees[i].salary = paySalary;
         _e.lastPayday = now;
     }
 
