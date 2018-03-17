@@ -12,6 +12,7 @@ contract Payroll {
 
     address owner;
     Employee[] employees;
+    uint totalSalary = 0;
 
     function Payroll() payable public {
         owner = msg.sender;
@@ -39,8 +40,9 @@ contract Payroll {
 
     function addEmployee(address employeeId, uint salary) public {
         require(isOwner());
-        var (_e, i) = _findEmployee(employeeId);
+        var (_e, ,) = _findEmployee(employeeId);
         assert(_e.id == 0x0);
+        totalSalary += salary;
         employees.push(Employee(employeeId, salary * 1 ether, now));
         return;
     }
@@ -49,6 +51,7 @@ contract Payroll {
         require(isOwner());
         var (_e, i) = _findEmployee(employeeId);
         assert(_e.id != 0x0);
+        totalSalary -= employees[i].salary;
         delete employees[i];
         employees[i] = employees[employees.length - 1];
         employees.length--;
@@ -60,6 +63,8 @@ contract Payroll {
         var (_e, i) = _findEmployee(employeeId);
         assert(_e.id != 0x0);
         _partialPaid(_e);
+        totalSalary += salary;
+        totalSalary -= employees[i].salary;
         employees[i].salary = salary;
         _e.lastPayday = now;
     }
@@ -70,13 +75,13 @@ contract Payroll {
     }
 
     function calculateRunway() public returns (uint) {
-        uint totalSalary = 0;
-        for (uint i = 0; i < employees.length; i++) {
-            totalSalary += employees[i].salary;
-        }
-        if (totalSalary == 0) {
-            return 0;
-        }
+        // uint totalSalary = 0;
+        // for (uint i = 0; i < employees.length; i++) {
+        //     totalSalary += employees[i].salary;
+        // }
+        // if (totalSalary == 0) {
+        //     return 0;
+        // }
         return address(this).balance / totalSalary;
     }
 
