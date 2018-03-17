@@ -6,24 +6,24 @@
 - 加入十个员工，每个员工的薪水都是1ETH
 每次加入一个员工后调用calculateRunway这个函数，并且记录消耗的gas是多少？Gas变化么？如果有 为什么？
 
-Sol:
+<br />Sol:
 <br />See file hw2_p1.sol
 <br />Gas for:
--no  trans excut
--1   22971	1699
--2   23759	2487
--3   24547	3275
--4   25335	4063
--5   26123	4851
--6   26911	5639
--7   27699	6427
--8   28487	7215
--9   29275	8003
--10  30063	8791
+<br />no  trans excut
+<br />1   22971	1699
+<br />2   23759	2487
+<br />3   24547	3275
+<br />4   25335	4063
+<br />5   26123	4851
+<br />6   26911	5639
+<br />7   27699	6427
+<br />8   28487	7215
+<br />9   29275	8003
+<br />10  30063	8791
 
--opt 22122	850
-- 如何优化calculateRunway这个函数来减少gas的消耗？
+<br />opt 22122	850
+<br /> 如何优化calculateRunway这个函数来减少gas的消耗？
 提交：智能合约代码，gas变化的记录，calculateRunway函数的优化
 
-Sol:
--See file hw2_p2.sol
+<br />Sol:
+<br />See file hw2_p2.sol
