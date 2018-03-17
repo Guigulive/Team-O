@@ -17,7 +17,7 @@ gas有变化，每增加一个员工transaction cost和executoion cost都增加�
 因为程序中的for循环是遍历数组 ，数组每增加一个元素都会增加计算量，而这些计算都需要消耗gas
 
 2.如何优化calculateRunway这个函数来减少gas的消耗？ 提交：智能合约代码，gas变化的记录，calculateRunway函数的优化
-定义一个storage变量totalSalary，在每次添加和删除员工时计算出当时的总工资。从而取消calculateRunway方法中的遍历
+定义一个storage变量totalSalary，在每次添加、删除、修改员工时计算出当时的总工资。从而取消calculateRunway方法中的遍历
 每次消耗稳定在 transaction cost:22124gas; execution cost:852gas
  **/
  
@@ -79,13 +79,16 @@ contract Payroll {
        
     }
     
-    function updateEmployee(address employeeId, uint salary) {
+    /** 修改员工  **/
+    function updateEmployee(address employeeId, uint salary) returns(uint) {
         require (msg.sender == owner);
         var(employee,index) = _findEmployee(employeeId);
         assert(employee.id != 0x0);
         _partialPaid(employee);
         employees[index].salary = salary * 1 ether;
         employees[index].lastPayday = now;
+        //将工资差额加到总工资中去 
+       return totalSalary += (salary * 1 ether - employee.salary);
     }
     
     
