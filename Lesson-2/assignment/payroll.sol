@@ -32,14 +32,14 @@ contract Payroll {
         }
         
     }
-
+    /** 添加员工 **/
     function addEmployee(address employeeId, uint salary) {
         require(msg.sender == owner);
         var (employee,index) = _findEmployee(employeeId);
         assert(employee.id == 0x0);
         employees.push(Employee(employeeId,salary*1 ether , now));
     }
-    
+    /** 删除员工 **/
     function removeEmployee(address employeeId) {
         require(msg.sender == owner);
         var(employee,index) = _findEmployee(employeeId);
