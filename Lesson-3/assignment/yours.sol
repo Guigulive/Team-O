@@ -3,7 +3,7 @@
 第一题：完成今天所开发的合约产品化内容，使用Remix调用每一个函数，提交函数调用截图
 答：详见目录下的png文件
 第二题：增加 changePaymentAddress 函数，更改员工的薪水支付地址，思考一下能否使用modifier整合某个功能
-答：增加了changePaymentAddress函数，新增employeeNotExist的modifier，利用employeeExist的modifier，代码详见以下内容。
+答：增加了changePaymentAddress函数，新增modifier:employeeNotExist，复用了modifier:employeeExist，代码详见以下内容。
 第三题（加分题）：自学C3 Linearization, 求以下 contract Z 的继承线
 contract O
 contract A is O     [A O] 
