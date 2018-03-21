@@ -3,7 +3,7 @@
 
 ### 第三课：课后作业
 - 第一题：完成今天所开发的合约产品化内容，使用Remix调用每一个函数，提交函数调用截图
-<br>
+
 addFund：
 ![image](https://github.com/mind-gravity/Team-O/blob/localrepo/Lesson-3/assignment/images/addFund.png)
 
