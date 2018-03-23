@@ -21,8 +21,12 @@ contract Z is K1, K2    mro(Z)=[Z] + merge(mro(K2), mro(K1), [K2,K1]) = [Z] + me
 答：contract Z 的继承线为[Z, K2, C, K1, B, A, O]
 */
 pragma solidity ^0.4.14;
+import './SafeMath.sol';
 
 contract Payroll {
+
+    using SafeMath for uint;
+    
     struct Employee {
         address id;
         uint salary;
@@ -68,7 +72,11 @@ contract Payroll {
     }
 
     function _partialPaid(Employee employee) private {
-        uint payment = employee.salary * (now - employee.lastPayday)/payDuration;
+        /* uint payment = employee.salary * (now - employee.lastPayday)/payDuration; */
+        uint payment =  now.sub(employee.lastPayday)
+        .mul(employee.salary)
+        .div(payDuration);
+
         employee.id.transfer(payment);
 
     }
@@ -76,24 +84,23 @@ contract Payroll {
     /* 增加modifier employeeNotExist进行校验 */
     function addEmployee(address employeeId, uint salary) onlyOwner employeeNotExist(employeeId) {
         var employee = employees[employeeId];
-        totalSalary += salary * 1 ether;
-        employees[employeeId] = Employee(employeeId, salary*1 ether, now);
+        totalSalary = totalSalary.add(salary.mul(1 ether));
+        employees[employeeId] = Employee(employeeId, salary.mul(1 ether), now);
     }
 
     /* remove */
     function removeEmployee(address employeeId) onlyOwner employeeExist(employeeId) {
         var employee = employees[employeeId];
         _partialPaid(employee);
-        totalSalary -= employees[employeeId].salary;
+        totalSalary = totalSalary.sub(employee.salary);
         delete employees[employeeId];
     }
     /* 修改 */
     function updateEmployee(address employeeId, uint salary) onlyOwner employeeExist(employeeId)  {
         var employee = employees[employeeId];
         _partialPaid(employee);
-        totalSalary -= employees[employeeId].salary;
-        employees[employeeId].salary = salary * 1 ether;
-        totalSalary += employees[employeeId].salary;
+        totalSalary = totalSalary.add(salary.mul(1 ether)).sub(employee.salary);
+        employees[employeeId].salary = salary.mul(1 ether);
         employees[employeeId].lastPayday = now;
     }
 
@@ -104,7 +111,8 @@ contract Payroll {
 
     function calculateRunway() returns (uint) {
 
-        return this.balance / totalSalary;
+        /* return this.balance / totalSalary; */
+        return this.balance.div(totalSalary);
     }
 
     function hasEnoughFund() returns (bool) {
@@ -122,7 +130,8 @@ contract Payroll {
 
     function getPaid() employeeExist(msg.sender) {
         var employee = employees[msg.sender];
-        uint nextPayday = employee.lastPayday + payDuration;
+        /* uint nextPayday = employee.lastPayday + payDuration; */
+        uint nextPayday = employee.lastPayday.add(payDuration);
         assert(nextPayday < now);
         employee.lastPayday = nextPayday;
         employee.id.transfer(employee.salary);
