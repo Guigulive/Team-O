@@ -9,12 +9,16 @@ contract O
 contract A is O     [A O] 
 contract B is O     [B O] 
 contract C is O     [C O] 
-contract K1 is A, B     mro(K1)=[K1] + merge(mro(A), mro(B), [A,B]) = [K1,A,B,O]
-contract K2 is A, C     mro(K2)=[K2] + merge(mro(A), mro(C), [A,C]) = [K2,A,C,O]
-contract Z is K1, K2    mro(Z)=[Z] + merge(mro(K1), mro(K2), [K1,K2]) = [Z] + merge([K1,A,B,O],[K2,A,C,O], [K1,K2])
-                              =[Z,K1,K2,] + merge([A,B,O],[A,C,O]) 
-                              = [Z,K1,K2,A,B,C,O]
-答：contract Z 的继承线为[Z,K1,K2,A,B,C,O]
+contract K1 is A, B     mro(K1)=[K1] + merge(mro(B), mro(A), [A,B]) = [K1,B,A,O]
+contract K2 is A, C     mro(K2)=[K2] + merge(mro(C), mro(A), [A,C]) = [K2,C,A,O]
+contract Z is K1, K2    mro(Z)=[Z] + merge(mro(K2), mro(K1), [K2,K1]) = [Z] + merge([K2,C,A,O],[K1,B,A,O], [K2,K1])
+                         = [Z, K2] + merge([C, A, O], [K1, B, A, O], [K1]) 
+                         = [Z, K2, C] + merge([A, O], [K1, B, A, O], [K1])
+                         = [Z, K2, C, K1] + merge([A, O], [B, A, O])
+                         = [Z, K2, C, K1, B] + merge([A, O], [A, O])
+                         = [Z, K2, C, K1, B, A] + merge([O], [O])
+                         = [Z, K2, C, K1, B, A, O]                              
+答：contract Z 的继承线为[Z, K2, C, K1, B, A, O]
 */
 pragma solidity ^0.4.14;
 
