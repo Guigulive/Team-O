@@ -5,8 +5,9 @@
 pragma solidity ^0.4.14;
 
 import './Ownable.sol';
-
+import './SafeMath.sol';
 contract Payroll is Ownable{
+    using SafeMath for uint;
     struct Employee {
         address id;
         uint salary;
@@ -33,7 +34,7 @@ contract Payroll is Ownable{
     }
     
     function _partialPaid(Employee employee) private {
-        uint payment  = employee.salary * (now - employee.lastPayday) / payDuration;
+        uint payment  = employee.salary.mul(now.sub(employee.lastPayday)).div(payDuration);
         employee.id.transfer(payment);
     }
 
@@ -41,11 +42,12 @@ contract Payroll is Ownable{
         var employee = employees[employeeId];
         assert(employee.id == 0x0);
         employees[employeeId] = Employee(employeeId, salary * 1 ether, now);
-        totalSalary += salary * 1 ether;
+        totalSalary.add(salary * 1 ether);
     }
     
     function changePaymentAddress(address preEmployeeId, address newEmployeeId)employeePartialPaid(preEmployeeId){
         var employee = employees[preEmployeeId];
+        employee.id = newEmployeeId;
         employees[newEmployeeId] = employee;
         delete employees[preEmployeeId];
     }
@@ -53,13 +55,13 @@ contract Payroll is Ownable{
     function updateEmployee(address employeeId, uint salary) onlyOwner employeePartialPaid(employeeId){
         
         salary *= 1 ether;
-        totalSalary += salary - employees[employeeId].salary;
+        totalSalary.add(salary.sub(employees[employeeId].salary));
         employees[employeeId].salary = salary;
         employees[employeeId].lastPayday = now;
     }
     
     function removeEmployee(address  employeeId) onlyOwner employeePartialPaid(employeeId){
-        totalSalary -= employees[employeeId].salary;
+        totalSalary.sub(employees[employeeId].salary);
         delete employees[employeeId];
         
     }
