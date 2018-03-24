@@ -19,20 +19,20 @@ mro(A) = [A, O]
 mro(B) = [B, O]
 mro(C) = [C, O]
 
-mro(K1) = [K1] + merge(mro(A), mro(B), [A, B])
-        = [K1] + merge([A, O], [B, O], [A, B])
-        = [K1, A] + merge([O], [B, O], [B])
-        = [K1, A, B] + merge([O], [O])
-        = [K1, A, B, O]
+mro(K1) = [K1] + merge(mro(A), mro(B), [B, A])
+        = [K1] + merge([A, O], [B, O], [B, A])
+        = [K1, B] + merge([O], [A, O], [A])
+        = [K1, B, A] + merge([O], [O])
+        = [K1, B, A, O]
 
 同理
-mro(K2) = [K2, A, C, O]
+mro(K2) = [K2, C, A, O]
 
 mro(Z) = [Z] + merge(mro(K1), mro(K2), [K1, K2])
-       = [Z] + merge([K1, A, B , O], [K2, A, C, O], [K1, K2])
-       = [Z, K1] + merge([A, B, O], [K2, A, C, O], [K2])
-       = [Z, K1, K2] + merge([A, B, O], [A, C, O])
-       = [Z, K1, K2, A] + merge([B, O], [C, O])
-       = [Z, K1, K2, A, B] + merge([O], [C, O])
-       = [Z, K1, K2, A, B, C, O]
+       = [Z] + merge([K1, B, A , O], [K2, C, A, O], [K2, K1])
+       = [Z, K2] + merge([K1, B, A, O], [C, A, O], [K1])
+       = [Z, K2, C] + merge([K1, B, A, O], [A, O], [K1])
+       = [Z, K2, C, K1] + merge([B, A, O], [A, O])
+       = [Z, K1, C, K1, B] + merge([A, O], [O])
+       = [Z, K2, C, K1, B, A, O]
 ```

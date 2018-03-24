@@ -1,6 +1,10 @@
 pragma solidity ^0.4.14;
 
-contract Payroll {
+import "zeppelin-solidity/contracts/ownership/Ownable.sol";
+import "zeppelin-solidity/contracts/math/SafeMath.sol";
+
+contract Payroll is Ownable {
+    using SafeMath for uint;
     struct Employee {
         address id;
         uint salary;
