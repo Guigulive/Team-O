@@ -25,5 +25,7 @@
     "web3": "^0.20.6",
     "ganache-cli": "^6.1.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "zeppelin-solidity": "1.7.0"
+  }
 }
