@@ -96,12 +96,12 @@ contract Payroll is Ownable{
         return this.balance;
     }
     
-    function calculateRunway() public returns (uint) {
+    function calculateRunway() public constant returns (uint) {
         require(totalSalary != 0);
         return (this.balance).div(totalSalary);
     }
     
-    function hasEnoughFund() public returns (bool) {
+    function hasEnoughFund() public constant returns (bool) {
         return calculateRunway() > 0;
     }
     
