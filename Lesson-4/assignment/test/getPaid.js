@@ -13,6 +13,8 @@ contract('Test_Payroll_getPaid', function(accounts) {
     const salary_2 = 1;
     const paidEmployee_3 = accounts[3];
     const salary_3 = 1;
+    const paidEmployee_4 = accounts[4];
+    const salary_4 = 1;
     const notPaidEmployee = accounts[9];
     var timepassed;//单位秒
 
@@ -21,7 +23,7 @@ contract('Test_Payroll_getPaid', function(accounts) {
         return Payroll.deployed()
         .then(function(instance) {
         payrollInstance = instance;
-        return payrollInstance.addEmployee(paidEmployee_3, salary_3, {from: owner});
+        return payrollInstance.addEmployee(paidEmployee_4, salary_4, {from: owner});
         }).then(function() {
         timepassed = 11;
         console.log("      等待", timepassed, "秒...");
@@ -30,7 +32,7 @@ contract('Test_Payroll_getPaid', function(accounts) {
         }).then(function(){
         return web3.currentProvider.send({jsonrpc: '2.0',method: 'evm_mine'})
         }).then(function(){
-        return payrollInstance.getPaid({from: paidEmployee_3});
+        return payrollInstance.getPaid({from: paidEmployee_4});
         }).then(function() {assert(false,"没有异常 不符合预期");},
                 function() {assert(true);});
     });
