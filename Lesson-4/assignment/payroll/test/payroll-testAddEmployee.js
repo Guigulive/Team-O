@@ -7,16 +7,16 @@ contract('Payroll', function(accounts) {
   const salary = 2;
 
   it("测试添加员工 salary 为2.", function() {
-    return Payroll.deployed().then(instance => {
+    return Payroll.deployed().then(function(instance) {
 		
       payrollInstance = instance;
 	  
       return payrollInstance.addEmployee( employeeId, salary, {from: owner});
-    }).then(() =>{
+    }).then(function(){
 		
-      return payrollInstance.Employees(employeeId);
+      return payrollInstance.employees(employeeId);
 	  
-    }).then((employee) => {
+    }).then(function(employee){
       console.log(employee);
       assert.equal(employee[1], web3.toWei(salary, 'ether'), "员工添加失败!");
     });
