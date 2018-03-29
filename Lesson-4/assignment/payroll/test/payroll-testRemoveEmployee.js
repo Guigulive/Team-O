@@ -9,23 +9,23 @@ contract('Payroll', function (accounts) {
      it("测试先增加员工再将该员工移出，在合约为owner的情况下", function () {
 		var payroll;
 		
-		return Payroll.deployed().then(instance => {
+		return Payroll.deployed().then(function(instance) {
 			
 		payroll = instance;
 		
 		return payroll.addEmployee(employee, salary, { from: owner });
 		
-		}).then(() => {
+		}).then(function() {
 			
 			return payroll.removeEmployee(employee);
 		
-		}).then(() => {
+		}).then(function() {
 			
 			return payroll.employees(employee);
 			
-		}).then(employeeInfo => {
+		}).then(function(employeeInfo){
 			console.log(employeeInfo);
-			assert.equal(employeeInfo[0].toNumber(), 0, "移除员工失败");
+			assert.equal(employeeInfo[0], 0, "移除员工失败");
 		});
 	});
 
@@ -33,14 +33,14 @@ contract('Payroll', function (accounts) {
      it("测试移除一个并不存在的员工", function () {
 		 
         var payroll;
-        return Payroll.deployed().then( instance => {
+        return Payroll.deployed().then( function(instance){
 			
             payroll = instance;
             
 			return payroll.removeEmployee(employee);
-        }).then(() => {
+        }).then(function() {
             assert(false, "不能成功移出一个不存在的员工");
-        }).catch(error => {
+        }).catch(function(error){
             assert.include(
 				error.toString(), 
 				"invalid opcode", 
