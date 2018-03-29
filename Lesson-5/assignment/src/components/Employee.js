@@ -15,7 +15,7 @@ class Employee extends Component {
 
     checkEmployee = () => {
         const { payroll, account, web3 } = this.props;
-        payroll.employeeList.call(account, {
+        payroll.employees.call(account, {
             from: account,
             gas: 30000000
         }).then((result) => {
