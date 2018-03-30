@@ -90,7 +90,8 @@ class EmployeeList extends Component {
     const { payroll, account } = this.props;
     const { address, salary, employees } = this.state;
     payroll.addEmployee(address, salary, {
-      from: account, gas: 300000
+      from: account,
+      gas:1000000
     }).then(() => {
       const newEmployee = {
         address,
@@ -111,7 +112,7 @@ class EmployeeList extends Component {
     const { payroll, account } = this.props;
     const { employees } = this.state;
     payroll.updateEmployee(address, salary, {
-      from: account, gas: 300000
+      from: account
     }).then(() => {
       this.setState({
         employees: employees.map((employee) => {
@@ -130,7 +131,7 @@ class EmployeeList extends Component {
     const { payroll, account } = this.props;
     const { employees } = this.state;
     payroll.removeEmployee(employeeId, {
-      from: account, gas: 300000
+      from: account
     }).then((result) => {
       this.setState({
         employees: employees.filter(employee => employee.address !== employeeId)
