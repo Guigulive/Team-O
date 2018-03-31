@@ -21,7 +21,7 @@ class App extends Component {
     this.state = {
       storageValue: 0,
       web3: null,
-      mode: 'employer'
+      mode: ''
     }
   }
 
@@ -87,8 +87,12 @@ class App extends Component {
 
     switch(mode) {
       case 'employer':
+        //alert('employer');
+        //break;
         return <Employer account={account} payroll={payroll} web3={web3} />
       case 'employee':
+        //alert('employee');
+        //break;
         return <Employee account={account} payroll={payroll} web3={web3} />
       default:
         return <Alert message="请选一个模式" type="info" showIcon />
