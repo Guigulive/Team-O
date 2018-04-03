@@ -6,6 +6,8 @@ import { Layout, Menu, Spin, Alert } from 'antd';
 
 import Employer from './components/Employer';
 import Employee from './components/Employee';
+import Accounts from './components/Accounts';
+import Common from './components/Common';
 
 import 'antd/dist/antd.css';
 import './App.css';
