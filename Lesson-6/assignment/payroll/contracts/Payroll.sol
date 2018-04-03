@@ -37,7 +37,7 @@ contract Payroll is Ownable{
     event NewFund(
         uint balance
     );
-    event Getpaid(
+    event GetPaid(
         address employee
     );
  
@@ -121,7 +121,7 @@ contract Payroll is Ownable{
         require(nextPayday < now);
         employees[msg.sender].lastPayday = nextPayday;
         employee.id.transfer(employee.salary);
-        Getpaid(employee.id);
+        GetPaid(employee.id);
     }
 
     function changePaymentAddress(address employeeId,address newEmployeeId) onlyOwner employeeExist(employeeId) employeeNotExist(newEmployeeId) {
