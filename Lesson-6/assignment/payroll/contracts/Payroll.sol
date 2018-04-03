@@ -25,6 +25,22 @@ contract Payroll is Ownable{
 
     mapping(address => Employee) public employees;
 
+    event NewEmployee(
+        address employee
+    );
+    event UpdateEmployee(
+        address employee
+    );
+    event RemoveEmployee(
+        address employee
+    );
+    event NewFund(
+        uint balance
+    );
+    event Getpaid(
+        address employee
+    );
+ 
     //验证地址存在
     modifier employeeExist(address employeeId) {
         Employee  employee = employees[employeeId];
@@ -57,6 +73,7 @@ contract Payroll is Ownable{
         totalSalary = totalSalary.add(salary.mul(1 ether));
         totalEmployee = totalEmployee.add(1);
         employeeList.push(employeeId);
+        NewEmployee(employeeId);
     }
 
     function removeEmployee(address employeeId) onlyOwner  employeeExist(employeeId) {
@@ -71,6 +88,8 @@ contract Payroll is Ownable{
         _partialPaid(employee);
         totalEmployee = totalEmployee.sub(1);
 
+        RemoveEmployee(employeeId);
+
     }
 
     function updateEmployee(address employeeId, uint salary)
@@ -80,9 +99,11 @@ contract Payroll is Ownable{
         employees[employeeId].salary = salary.mul(1 ether);
         employees[employeeId].lastPayday = now;
         _partialPaid(employee);
+        UpdateEmployee(employeeId);
     }
 
     function addFund()  payable returns (uint) {
+        NewFund(this.balance);
         return this.balance;
     }
 
@@ -100,6 +121,7 @@ contract Payroll is Ownable{
         require(nextPayday < now);
         employees[msg.sender].lastPayday = nextPayday;
         employee.id.transfer(employee.salary);
+        Getpaid(employee.id);
     }
 
     function changePaymentAddress(address employeeId,address newEmployeeId) onlyOwner employeeExist(employeeId) employeeNotExist(newEmployeeId) {
